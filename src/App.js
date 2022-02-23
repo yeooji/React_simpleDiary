@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
@@ -54,11 +54,30 @@ function App() {
     setData(
       data.map((it) => it.id === targetId ? {...it, content: newContent} : it)
     );
-  };  
+  };
+
+  const getDiaryAnalysis = useMemo(() => {
+      console.log("일기 분석 시작!");
+
+      const goodCount = data.filter((it) => it.emotion >= 3).length; // 좋음
+      const badCount = data.length - goodCount; // 나쁨
+      const goodRatio = (goodCount / data.length) * 100; // 좋음비율
+
+      //3개의 데이터를 객체로 리턴
+      return {goodCount,badCount,goodRatio};
+    }, [data.length]
+  );
+
+  //객체로 반환되니까 똑같이 비구조화할당으로 받도록 처리
+  const {goodCount,badCount,goodRatio} = getDiaryAnalysis;
 
   return (
     <div className="App">
       <DiaryEditor onCreate={onCreate} />
+      <div>전체일기 : {data.length}</div>
+      <div>기분 좋은 일기 개수 : {goodCount}</div>
+      <div>기분 나쁜 일기 개수 : {badCount}</div>
+      <div>기분 좋은 일기 비율 : {goodRatio}</div>
       <DiaryList onEdit={onEdit} onRemove={onRemove} diaryList={data} />
     </div>
   );
