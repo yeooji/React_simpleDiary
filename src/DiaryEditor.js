@@ -1,6 +1,11 @@
-import React, { useRef,useState } from "react";
+import React, { useEffect, useRef,useState } from "react";
 
 const DiaryEditor = ({onCreate}) => {
+
+  //언제 렌더가 일어나는지 찍어보자
+  useEffect(() => {
+    console.log('DiaryEditor Render');
+  });
 
   const authorInput = useRef();
   const contentInput = useRef();
@@ -82,4 +87,4 @@ const DiaryEditor = ({onCreate}) => {
   );
 };
 
-export default DiaryEditor;
+export default React.memo(DiaryEditor);

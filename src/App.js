@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useRef, useState} from 'react';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
@@ -31,7 +31,7 @@ function App() {
     getData();
   },[]);
  
-  const onCreate = (author, content, emotion) => {
+  const onCreate = useCallback((author, content, emotion) => {
     const create_date = new Date().getTime();
     const newItem = {
       author,
@@ -41,11 +41,11 @@ function App() {
       id : dateId.current
     };
     dateId.current += 1;
-    setData([newItem, ...data]);
-  };
+    setData((data) => [newItem, ...data]); // TODO 최적화3 - 디펜던시 어레이 대신
+  },[]
+  );
 
   const onRemove = (targetId) => {
-    console.log(`${targetId}번 일기가 삭제 되었습니다.`);
     const newDiaryList = data.filter((it) => it.id !== targetId);
     setData(newDiaryList);
   };
@@ -57,8 +57,6 @@ function App() {
   };
 
   const getDiaryAnalysis = useMemo(() => {
-      console.log("일기 분석 시작!");
-
       const goodCount = data.filter((it) => it.emotion >= 3).length; // 좋음
       const badCount = data.length - goodCount; // 나쁨
       const goodRatio = (goodCount / data.length) * 100; // 좋음비율
