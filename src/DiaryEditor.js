@@ -1,12 +1,6 @@
 import React, { useEffect, useRef,useState } from "react";
 
 const DiaryEditor = ({onCreate}) => {
-
-  //언제 렌더가 일어나는지 찍어보자
-  useEffect(() => {
-    console.log('DiaryEditor Render');
-  });
-
   const authorInput = useRef();
   const contentInput = useRef();
 

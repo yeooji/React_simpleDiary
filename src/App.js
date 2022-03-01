@@ -45,16 +45,15 @@ function App() {
   },[]
   );
 
-  const onRemove = (targetId) => {
-    const newDiaryList = data.filter((it) => it.id !== targetId);
-    setData(newDiaryList);
-  };
+  const onRemove = useCallback((targetId) => {
+    setData(setData => data.filter((it) => it.id !== targetId));
+  },[]);
 
-  const onEdit = (targetId, newContent) => {
-    setData(
+  const onEdit = useCallback((targetId, newContent) => {
+    setData((data) =>
       data.map((it) => it.id === targetId ? {...it, content: newContent} : it)
     );
-  };
+  },[]);
 
   const getDiaryAnalysis = useMemo(() => {
       const goodCount = data.filter((it) => it.emotion >= 3).length; // 좋음
