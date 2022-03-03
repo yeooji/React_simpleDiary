@@ -1,10 +1,36 @@
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {useCallback, useEffect, useMemo, useReducer, useRef} from 'react';
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
 
+const reducer = (state, action) => {
+  switch(action.type) {
+    case 'INIT': {
+      return action.data
+    }
+    case 'CREATE': {
+      const create_date = new Date().getTime();
+      const newItem = {
+        ...action.data,
+        create_date
+      }
+      return [newItem, ...state];
+    }
+    case 'REMOVE': {
+      return state.filter((it) => it.id !== action.targetId);
+    }
+    case 'EDIT': {
+      return state.map((it) => it.id === action.targetId ? {...it, content: action.newContent} : it);
+    }
+    default:
+      return state;
+  }
+};
+
 function App() {
-  const [data, setData] = useState([]); 
+  //const [data, setData] = useState([]);
+
+  const [data, dispatch] = useReducer(reducer,[]);
 
   const dateId = useRef(0);
 
@@ -23,7 +49,8 @@ function App() {
       }
     });
 
-    setData(initData);
+    dispatch({type:'INIT', data:initData});
+    //setData(initData);
   };
 
   // 마운트 후 바로 처리
@@ -32,27 +59,36 @@ function App() {
   },[]);
  
   const onCreate = useCallback((author, content, emotion) => {
-    const create_date = new Date().getTime();
-    const newItem = {
-      author,
-      content,
-      emotion,
-      create_date,
-      id : dateId.current
-    };
+
+    dispatch({type:'CREATE',data:{author, content, emotion, id:dateId.current}});
+
+    // const create_date = new Date().getTime();
+    // const newItem = {
+    //   author,
+    //   content,
+    //   emotion,
+    //   create_date,
+    //   id : dateId.current
+    // };
     dateId.current += 1;
-    setData((data) => [newItem, ...data]); // TODO 최적화3 - 디펜던시 어레이 대신
+    //setData((data) => [newItem, ...data]);
   },[]
   );
 
   const onRemove = useCallback((targetId) => {
-    setData(setData => data.filter((it) => it.id !== targetId));
+
+    dispatch({type:'REMOVE',targetId});
+
+    //setData(setData => data.filter((it) => it.id !== targetId));
   },[]);
 
   const onEdit = useCallback((targetId, newContent) => {
-    setData((data) =>
-      data.map((it) => it.id === targetId ? {...it, content: newContent} : it)
-    );
+
+    dispatch({type:'EDIT', targetId, newContent});
+
+    // setData((data) =>
+    //   data.map((it) => it.id === targetId ? {...it, content: newContent} : it)
+    // );
   },[]);
 
   const getDiaryAnalysis = useMemo(() => {
