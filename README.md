@@ -28,6 +28,6 @@ https://yeooji.github.io/React_simpleDiary/
 
 ## Function
 * Diary List Load
-* Diary Create
-* Diary Remove
-* Diary Edit
+* Diary Item Create
+* Diary Item Remove
+* Diary Item Edit
