@@ -1,11 +1,8 @@
 # React_simpleDiary
 React를 익히기 위한 프로젝트
 
-## Demo
+### Demo
 https://yeooji.github.io/React_simpleDiary/
-
-## Priview
-<!-- ![img](https://t1.daumcdn.net/cfile/tistory/99367D4B5BB37DB01C) -->
 
 ## File Tree
 ```
