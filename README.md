@@ -2,7 +2,7 @@
 React를 익히기 위한 프로젝트
 
 ### Demo
-https://yeooji.github.io/React_simpleDiary/
+<a href="https://yeooji.github.io/React_simpleDiary/" target="_blank">github.io_React_simpleDiary</a>
 
 ## File Tree
 ```
